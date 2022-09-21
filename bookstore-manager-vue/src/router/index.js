@@ -6,13 +6,28 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('../views/home.vue')
+    name: 'dashboard',
+    component: () => import('../views/dashboard.vue')
+  },
+  {
+    path: '/books',
+    name: 'books',
+    component: () => import(/* webpackChunkName: "about" */ '../views/books.vue')
+  },
+  {
+    path: '/publishers',
+    name: 'publishers',
+    component: () => import(/* webpackChunkName: "about" */ '../views/publishers.vue')
   },
   {
     path: '/rentals',
     name: 'rentals',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/rentals.vue')
+  },
+  {
+    path: '/users',
+    name: 'users',
+    component: () => import(/* webpackChunkName: "about" */ '../views/users.vue')
   }
 ]
 
