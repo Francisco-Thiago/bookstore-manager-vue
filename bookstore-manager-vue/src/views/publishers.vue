@@ -151,12 +151,17 @@ export default {
 
     mounted() {
         Publishers.listAll().then(response => {
-            response.data.content.map(e => {
-                this.publishers.push(e)
+            response.data.content.map(publisherContent => {
+                publisherContent["registrationDate"] = this.formatDate(publisherContent["registrationDate"])
+                this.publishers.push(publisherContent)
             })
         })
     },
     methods: {
+        
+        formatDate(date) {
+            return date.indexOf("-") != -1 ? date.split("-").reverse().join("/") : ""
+        },
 
         deleteAlert() {
             Swal.fire({

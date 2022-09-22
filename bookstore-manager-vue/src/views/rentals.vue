@@ -151,14 +151,20 @@ export default {
 
     mounted() {
         Rentals.listAll().then(response => {
-            response.data.content.map(e => {
-                e["book"] = e["book"]["name"]
-                e["user"] = e["user"]["name"]
-                this.rentals.push(e)
+            response.data.content.map(rentalContent => {
+                rentalContent["book"] = rentalContent["book"]["name"]
+                rentalContent["user"] = rentalContent["user"]["name"]
+                rentalContent["expirationDate"] = this.formatDate(rentalContent["expirationDate"])
+                rentalContent["returnDate"] = this.formatDate(rentalContent["expirationDate"])
+                rentalContent["entryDate"] = this.formatDate(rentalContent["entryDate"])
+                this.rentals.push(rentalContent)
             })
         })
     },
     methods: {
+        formatDate(date) {
+            return date.indexOf("-") != -1 ? date.split("-").reverse().join("/") : ""
+        },
 
         deleteAlert() {
             Swal.fire({
@@ -222,7 +228,7 @@ export default {
                 this.desserts.push(this.editedItem)
             }
             this.close()
-        },
+        }
     }
 }
 </script>
