@@ -163,7 +163,7 @@
         mounted() {
             Users.listAll().then(response => {
                 response.data.content.map(e => {
-                    e["role"] !=  "ADMIN" ? this.users.push(e) : ""
+                    e["role"] !=  "USER" ? this.users.push(e) : ""
                 })
             })
         },

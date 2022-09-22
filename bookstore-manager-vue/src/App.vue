@@ -27,9 +27,7 @@
       <v-spacer></v-spacer>
     </v-container>
   </v-app-bar>
-  <v-main>
       <router-view/>
-  </v-main>
   </v-app>
 </template>
 
@@ -39,11 +37,12 @@ export default {
   name: 'App',
   data: () => ({
   links: [
-      {item: 'Dashboard', route: "/"},
-      {item: 'Editoras', route: "/publishers"},
-      {item: 'Livros', route: "/books"},
-      {item: 'Alugueis', route: "/rentals"},
-      {item: 'Usuarios', route: "/users"}
+      {item: 'Dashboard', route: '/'},
+      {item: 'Editoras', route: '/publishers'},
+      {item: 'Livros', route: '/books'},
+      {item: 'Alugueis', route: '/rentals'},
+      {item: 'Usuarios', route: '/users'},
+      {item: 'Admins', route: '/admins'}
   ]
 })
 };

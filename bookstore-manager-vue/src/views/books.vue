@@ -1,20 +1,22 @@
 <template>
 <v-app id="inspire">
-    <v-main class="grey lighten-3">
-        <v-container>
+    <v-main class="grey lighten-3" style="align-items: center;">
+        <v-container >
             <v-row>
                 <v-col>
-                    <v-sheet max-height="70vh" rounded="lg">
-                        <v-data-table :headers="headers" :items="books" sort-by="id" class="elevation-1">
+                    <v-sheet rounded="lg">
+                        <v-data-table :headers="headers" :items="books" :search="search" height="50vh" item-height="20" sort-by="id" class="elevation-1">
                             <template v-slot:top>
                                 <v-toolbar flat>
                                     <v-toolbar-title>Livros</v-toolbar-title>
                                     <v-divider class="mx-4" inset vertical></v-divider>
                                     <v-spacer></v-spacer>
+                                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
+                                    <v-spacer></v-spacer>
                                     <v-dialog v-model="dialog" max-width="500px">
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                                                Criar livro
+                                                Novo livro
                                             </v-btn>
                                         </template>
                                         <v-card>
@@ -122,11 +124,11 @@ export default {
                 publisher: ""
             },
             defaultItem: {
-                id: 0,
-                name: "",
-                code: "",
-                quantity: 0,
-                publisher: ""
+                id: null,
+                name: null,
+                code: null,
+                quantity: null,
+                publisher: null
             }
 
         }
@@ -147,7 +149,7 @@ export default {
     },
 
     mounted() {
-        Books.listar().then(response => {
+        Books.listAll().then(response => {
             response.data.content.map(e => {
                 e["publisher"] = e["publisher"]["name"]
                 this.books.push(e)

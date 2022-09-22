@@ -1,7 +1,7 @@
 import { http } from './config'
 
 export default {
-    listar: () => {
+    listAll: () => {
         return http.get("books");
     }
 }
