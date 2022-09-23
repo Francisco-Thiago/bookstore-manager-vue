@@ -28,13 +28,13 @@
                                                 <v-container>
                                                     <v-row>
                                                         <v-col cols="12" sm="6" md="4">
-                                                            <v-text-field v-model="editedItem.name" label="Título"></v-text-field>
+                                                            <v-text-field v-model="editedItem.name" :error-messages="nameErrors" :counter="255" label="Nome da editora" required @input="$v.name.$touch()" @blur="$v.name.$touch()"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="4">
-                                                            <v-text-field v-model="editedItem.publisher" label="Editoras"></v-text-field>
+                                                            <v-text-field v-model="editedItem.code" :error-messages="nameErrors" :counter="50" label="Código" required @input="$v.name.$touch()" @blur="$v.name.$touch()"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="4">
-                                                            <v-text-field v-model="editedItem.quantity" label="Quantidade"></v-text-field>
+                                                            <v-text-field v-model="editedItem.city" :error-messages="nameErrors" :counter="60" label="Código" required @input="$v.name.$touch()" @blur="$v.name.$touch()"></v-text-field>
                                                         </v-col>
                                                     </v-row>
                                                 </v-container>
@@ -76,13 +76,34 @@
 </v-app>
 </template>
 
-    
 <script>
+import {
+    validationMixin
+} from 'vuelidate'
+import {
+    required,
+    maxLength,
+    email
+} from 'vuelidate/lib/validators'
 import Publishers from "../services/publishers"
 import Swal from 'sweetalert2'
 
 export default {
+    mixins: [validationMixin],
 
+    validations: {
+        name: {
+            required,
+            maxLength: maxLength(100)
+        },
+        email: {
+            required,
+            email
+        },
+        select: {
+            required
+        }
+    },
     data() {
         return {
             publishers: [],
@@ -111,7 +132,7 @@ export default {
                     value: 'registrationDate'
                 },
                 {
-                    text: 'Actions',
+                    text: 'Ações',
                     value: 'actions',
                     sortable: false
                 }
@@ -121,14 +142,12 @@ export default {
                 id: 0,
                 name: "",
                 code: "",
-                quantity: 0,
                 publisher: ""
             },
             defaultItem: {
                 id: null,
                 name: null,
                 code: null,
-                quantity: null,
                 publisher: null
             }
 
@@ -158,7 +177,7 @@ export default {
         })
     },
     methods: {
-        
+
         formatDate(date) {
             return date.indexOf("-") != -1 ? date.split("-").reverse().join("/") : ""
         },

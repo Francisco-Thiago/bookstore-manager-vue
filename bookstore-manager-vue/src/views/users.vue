@@ -27,11 +27,14 @@
                                             <v-card-text>
                                                 <v-container>
                                                     <v-row>
-                                                        <v-col cols="12" sm="6" md="4">
-                                                            <v-text-field v-model="editedItem.name" label="Título"></v-text-field>
+                                                        <v-col>
+                                                            <v-text-field v-model="editedItem.name" label="Nome de usuário"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="4">
-                                                            <v-text-field v-model="editedItem.publisher" label="Editoras"></v-text-field>
+                                                            <v-text-field v-model="editedItem.city" label="Cidade"></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="4">
+                                                            <v-text-field v-model="editedItem.address" label="Endereço"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="4">
                                                             <v-text-field v-model="editedItem.quantity" label="Quantidade"></v-text-field>
@@ -76,7 +79,6 @@
 </v-app>
 </template>
 
-    
 <script>
 import Users from "../services/users"
 import Swal from 'sweetalert2'

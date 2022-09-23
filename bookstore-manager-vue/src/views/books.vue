@@ -31,10 +31,13 @@
                                                             <v-text-field v-model="editedItem.name" label="Título"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="4">
-                                                            <v-text-field v-model="editedItem.publisher" label="Editoras"></v-text-field>
+                                                            <v-text-field v-model="editedItem.publisher" label="Editora"></v-text-field>
                                                         </v-col>
                                                         <v-col cols="12" sm="6" md="4">
-                                                            <v-text-field v-model="editedItem.quantity" label="Quantidade"></v-text-field>
+                                                            <v-text-field  type="number" v-model="editedItem.code" counter="10" label="Código (isbn)"></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="4">
+                                                            <v-text-field type="number" v-model="editedItem.quantity" label="Quantidade" :error-messages="nameErrors" required @input="$v.name.$touch()" @blur="$v.name.$touch()"></v-text-field>
                                                         </v-col>
                                                     </v-row>
                                                 </v-container>
