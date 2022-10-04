@@ -2,7 +2,7 @@ import { http } from './config'
 
 export default {
     listAll: () => {
-        return http.get("books");
+        return http.get('books');
     },
 
     findById: (id) => {
@@ -13,8 +13,8 @@ export default {
         return http.post('books', book)
     },
 
-    update: (id, rental) => {
-        return http.put(`books/${id}`, rental)
+    update: (id, book) => {
+        return http.put(`books/${id}`, book)
     },
 
     delete: (id) => {

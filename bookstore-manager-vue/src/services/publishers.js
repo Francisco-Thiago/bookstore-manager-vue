@@ -2,7 +2,7 @@ import { http } from './config'
 
 export default {
     listAll: () => {
-        return http.get("publishers");
+        return http.get('publishers');
     },
 
     findById: (id) => {
