@@ -13,8 +13,8 @@ export default {
         return http.post('publishers', publisher);
     },
 
-    update: (id, rental) => {
-        return http.put(`publishers/${id}`, rental)
+    update: (id, publisher) => {
+        return http.put(`publishers/${id}`, publisher)
     },
 
     delete: (id) => {

@@ -1,6 +1,10 @@
 import { http } from './config'
 
 export default {
+    authenticate: (user) => {
+        return http.post("users/authenticate", user)
+    },
+
     listAll: () => {
         return http.get("users")
     },
@@ -13,23 +17,23 @@ export default {
         return http.post('users/user', user)
     },
 
-    saveAdmin: (admin) => {
-        return http.post('users/admin', admin)
+    saveAdmin: (admin, header) => {
+        return http.post('users/admin', admin, header)
     },
 
     updateUser: (id, user) => {
         return http.put(`users/user/${id}`, user)
     },
 
-    updateAdmin: (id, admin) => {
-        return http.put(`users/admin/${id}`, admin)
+    updateAdmin: (id, admin, header) => {
+        return http.put(`users/admin/${id}`, admin, header)
     },
 
     deleteUser: (id) => {
         return http.delete(`users/user/${id}`)
     },
 
-    deleteAdmin: (id) => {
-        return http.delete(`users/admin/${id}`)
+    deleteAdmin: (id, header) => {
+        return http.delete(`users/admin/${id}`, header)
     }
 }

@@ -21,7 +21,7 @@
                                         </template>
                                         <v-card>
                                             <v-card-title>
-                                                <span class="text-h5">Criar administrador</span>
+                                                <span class="text-h5">Criar usuário</span>
                                             </v-card-title>
 
                                             <v-card-text>
@@ -48,7 +48,7 @@
                                                                 <v-text-field v-model="createdItem.username" :rules="usernameRules" label="Username" required></v-text-field>
                                                             </v-col>
                                                             <v-col>
-                                                                <v-text-field v-model="createdItem.password" :rules="passwordRules" label="Senha" required></v-text-field>
+                                                                <v-text-field v-model="createdItem.password" :rules="passwordRules" label="Password" required></v-text-field>
                                                             </v-col>
                                                         </v-row>
                                                     </v-container>
@@ -69,7 +69,7 @@
                                     <v-dialog v-model="edit" max-width="500px">
                                         <v-card>
                                             <v-card-title>
-                                                <span class="text-h5">Editar administrador</span>
+                                                <span class="text-h5">Editar usuário</span>
                                             </v-card-title>
 
                                             <v-card-text>
@@ -96,7 +96,7 @@
                                                                 <v-text-field v-model="editedItem.username" :rules="usernameRules" label="Username" required></v-text-field>
                                                             </v-col>
                                                             <v-col>
-                                                                <v-text-field v-model="editedItem.password" :rules="passwordRules" label="Senha" required></v-text-field>
+                                                                <v-text-field v-model="editedItem.password" :rules="passwordRules" label="Password" required></v-text-field>
                                                             </v-col>
                                                         </v-row>
                                                     </v-container>
@@ -142,13 +142,16 @@
 <script>
 import Users from "../services/users"
 import Swal from 'sweetalert2'
-
+import {
+    jwtToken
+} from "@/stores/jwtToken"
 export default {
 
     data() {
         return {
             users: [],
             search: '',
+            token: jwtToken(),
             create: false,
             edit: false,
             dialogDelete: false,
@@ -194,9 +197,9 @@ export default {
                 email: "",
                 city: "",
                 address: "",
-                registrationDate: "",
                 username: "",
                 password: "",
+                registrationDate: "",
                 role: "ADMIN"
             },
             editedItem: {
@@ -204,10 +207,10 @@ export default {
                 name: "",
                 email: "",
                 city: "",
-                address: "",
-                registrationDate: "",
                 username: "",
                 password: "",
+                address: "",
+                registrationDate: "",
                 role: "ADMIN"
             },
             defaultItem: {
@@ -215,6 +218,8 @@ export default {
                 name: "",
                 email: "",
                 city: "",
+                username: "",
+                password: "",
                 address: "",
                 registrationDate: "",
                 role: "ADMIN"
@@ -223,6 +228,7 @@ export default {
             nameRules: [
                 v => !!v || 'Nome é necessário.',
                 v => v.length <= 255 || 'Quantidade máxima de cacteres excedida!',
+                v => !/[0-9]/.test(v) || 'Números não são permitidos'
             ],
             cityRules: [
                 v => !!v || 'Cidade é necessária.',
@@ -244,6 +250,7 @@ export default {
                 v => !!v || 'Senha é necessária.',
                 v => v.length <= 140 || 'Quantidade máxima de cacteres excedida!',
             ]
+
         }
     },
 
@@ -256,18 +263,8 @@ export default {
     mounted() {
         this.listData()
     },
-    methods: {
-        listData() {
-            if (this.users.length > 0) {
-                this.users = []
-            }
 
-            Users.listAll().then(response => {
-                response.data.content.map(adminContent => {
-                    adminContent["role"] != "USER" ? this.users.push(adminContent) : ""
-                })
-            })
-        },
+    methods: {
         deleteAlert(event) {
             const selectedId = event.composedPath()[2].firstChild.textContent
             Swal.fire({
@@ -282,20 +279,51 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (selectedId > 0) {
-                        Users.deleteAdmin(selectedId).then(response => {
+                        Users.deleteAdmin(selectedId, {
+                            headers: {
+                                Authorization: "Bearer " + this.token.jwtToken
+                            }
+                        }).then(response => {
                             this.listData()
                             this.responseMessageAPI(response.status, response.data.message)
                         }).catch(response => {
-                            this.responseMessageAPI(response.response.data.code, response.response.data.message)
+                            this.responseMessageAPI(response.response.data.status, response.response.data.message)
                         })
                     }
                 }
             })
         },
 
+        listData() {
+            if (this.users.length > 0) {
+                this.users = []
+            }
+
+            Users.listAll().then(response => {
+                response.data.content.map(userContent => {
+                    userContent["role"] != "USER" ? this.users.push(userContent) : ""
+                })
+            })
+        },
+
         editItem(item) {
             this.editedIndex = this.users.indexOf(item)
-            this.editedItem = Object.assign({}, item)
+            const {
+                id,
+                address,
+                city,
+                email,
+                name,
+                registrationDate,
+                role
+            } = item
+            this.editedItem["id"] = id
+            this.editedItem["address"] = address
+            this.editedItem["city"] = city
+            this.editedItem["email"] = email
+            this.editedItem["name"] = name
+            this.editedItem["registrationDate"] = registrationDate
+            this.editedItem["role"] = role
             this.edit = true
         },
 
@@ -336,11 +364,15 @@ export default {
 
         post() {
             if (this.valid) {
-                Users.saveAdmin(this.createdItem).then(res => {
+                Users.saveAdmin(this.createdItem, {
+                    headers: {
+                        Authorization: "Bearer " + this.token.jwtToken
+                    }
+                }).then(res => {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
-                    this.responseMessageAPI(res.response.data.code, res.response.data.message)
+                    this.responseMessageAPI(res.response.data.status, res.response.data.message)
                 })
                 this.closeCreate()
             } else {
@@ -350,19 +382,53 @@ export default {
 
         put() {
             if (this.valid) {
-                Users.updateAdmin(this.editedItem.id, this.editedItem).then(response => {
+                Users.updateAdmin(this.editedItem.id, this.editedItem, {
+                    headers: {
+                        Authorization: "Bearer " + this.token.jwtToken
+                    }
+                }).then(response => {
                     this.listData()
                     this.responseMessageAPI(response.status, response.data.message)
                     if (response.status >= 200 && response.status < 300) {
                         this.closeEdit()
                     }
                 }).catch(res => {
-                    this.responseMessageAPI(res.response.data.code, res.response.data.message)
+                    console.log(res)
+                    this.responseMessageAPI(res.response.data.status, res.response.data.message)
                 })
             } else {
                 this.$refs.form.validate()
             }
         },
+
+        responseMessageAPI(code, message) {
+            if (code >= 200 && code < 300) {
+                Swal.fire(
+                    'Realizado com sucesso!',
+                    `${message}`,
+                    'success'
+                )
+            } else if (code >= 300 && code < 400) {
+                Swal.fire(
+                    'Psiu!',
+                    `${message}`,
+                    'info'
+                )
+            } else if (code >= 400 && code < 500) {
+                Swal.fire(
+                    'Um erro inesperado ocorreu!',
+                    `${message}`,
+                    'error'
+                )
+            } else if (code >= 500 && code < 600) {
+                Swal.fire({
+                    title: `Um problema delicado ocorreu.`,
+                    text: `${message}`,
+                    icon: 'error',
+                    footer: `<a href="mailto:vieirathiago779@gmail.com" target="_blank">Contate-me através deste email </a>`
+                })
+            }
+        }
     }
 }
 </script>

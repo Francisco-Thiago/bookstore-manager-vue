@@ -1,66 +1,29 @@
 <template>
-<v-app>
-
-    <v-app-bar v-if="verifyRouter()" app color="pink" flat>
-        <v-container class="py-0 fill-height">
-            <router-link to="/">
-                <v-img max-height="60" max-width="80" src="../src/assets/logo.svg" link></v-img>
-            </router-link>
-            <v-spacer></v-spacer>
-            <v-btn class="menu-item" v-for="link of links" :key="link.item" :to="link.route" link text>
-                {{ link.item }}
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn to="login" dark>
-                Login
-            </v-btn>
-        </v-container>
-    </v-app-bar>
-    <router-view />
-</v-app>
+<main>
+    <div>
+        <router-link to="/admins" class="close">
+            <IosClose class="close-icon" />
+        </router-link>
+    </div>
+    <form class="main-content" @submit.prevent="handleSubmit">
+        <div class="welcome">
+            <h1><img src="../img/login.svg" alt="profile">Login</h1>
+            <p>Somente administradores podem criar administradores.</p>
+        </div>
+        <div class="input-group">
+            <label class="label-icon">
+                <IosPerson class="icon" />
+                <input type="text" v-model="username" placeholder="Digite seu username" class="input-text" required>
+            </label>
+            <label class="label-icon">
+                <IosKey class="icon" />
+                <input type="password" v-model="password" placeholder="Digite sua senha" class="input-text" required>
+            </label>
+        </div>
+        <input type="submit" class="button" value="Fazer login">
+    </form>
+</main>
 </template>
-
-<script>
-import {
-    jwtToken
-} from "../src/stores/jwtToken"
-export default {
-    name: "App",
-    data: () => ({
-        username: '',
-        password: '',
-        jwtToken: jwtToken(),
-        login: false,
-        links: [{
-            item: "Dashboard",
-            route: "/"
-        }, {
-            item: "Editoras",
-            route: "/publishers"
-        }, {
-            item: "Livros",
-            route: "/books"
-        }, {
-            item: "Alugueis",
-            route: "/rentals"
-        }, {
-            item: "Usuarios",
-            route: "/users"
-        }, {
-            item: "Admins",
-            route: "/admins"
-        }]
-    }),
-    methods: {
-        handleSubmit() {
-            this.jwtToken.newToken(this.username, this.password)
-        },
-        verifyRouter(route = window.location.pathname) {
-            return route != '/login'
-        }
-    },
-};
-</script>
 
 <style>
 * {
@@ -142,9 +105,6 @@ a {
     padding: 1rem;
 }
 
-.content {
-    max-width: 250px;
-}
 
 .welcome {
     text-align: center;
@@ -219,3 +179,50 @@ a {
     background-color: rgb(231, 85, 109);
 }
 </style>
+
+    
+<script>
+import {
+    jwtToken
+} from "../stores/jwtToken"
+import IosClose from "../../node_modules/vue-ionicons/dist/ios-close.vue";
+import IosKey from "../../node_modules/vue-ionicons/dist/ios-key.vue";
+import IosPerson from "../../node_modules/vue-ionicons/dist/ios-person.vue";
+export default {
+    name: "App",
+    data: () => ({
+        username: '',
+        password: '',
+        jwtToken: jwtToken(),
+        links: [{
+            item: "Dashboard",
+            route: "/"
+        }, {
+            item: "Editoras",
+            route: "/publishers"
+        }, {
+            item: "Livros",
+            route: "/books"
+        }, {
+            item: "Alugueis",
+            route: "/rentals"
+        }, {
+            item: "Usuarios",
+            route: "/users"
+        }, {
+            item: "Admins",
+            route: "/admins"
+        }]
+    }),
+    methods: {
+        handleSubmit() {
+            this.jwtToken.newToken(this.username, this.password)
+        }
+    },
+    components: {
+        IosClose,
+        IosKey,
+        IosPerson
+    }
+};
+</script>
