@@ -1,24 +1,10 @@
 # bookstore-manager-vue
 
-## Project setup
+Este projeto serve como uma extensão de um outro projeto chamado "BookStore Manager".
+
 ```
-npm install
+Atualmente em desenvolvimento. 
+O README será devidamente atualizado após sua finalização.
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Feito com ❤️ por Francisco Thiago.
