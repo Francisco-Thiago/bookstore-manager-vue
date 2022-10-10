@@ -1,5 +1,5 @@
 <template>
-<v-app id="inspire">
+<v-app id="inspire" class="main-viewer">
     <v-main class="grey lighten-3" style="align-items: center;">
         <v-container>
             <v-row>
@@ -123,6 +123,12 @@
 </v-app>
 </template>
 
+<style>
+.main-viewer {
+    margin-left: 250px;
+}
+</style>
+
 <script>
 import Users from "../services/users"
 import Swal from 'sweetalert2'
@@ -135,7 +141,6 @@ export default {
             search: '',
             create: false,
             edit: false,
-            dialogDelete: false,
             headers: [{
                     text: 'Id',
                     align: 'start',
@@ -221,12 +226,6 @@ export default {
         }
     },
 
-    watch: {
-        dialogDelete(val) {
-            val || this.closeDelete()
-        },
-    },
-
     mounted() {
         this.listData()
     },
@@ -276,12 +275,6 @@ export default {
             this.edit = true
         },
 
-        deleteItem(item) {
-            this.editedIndex = this.users.indexOf(item)
-            this.editedItem = Object.assign({}, item)
-            this.dialogDelete = true
-        },
-
         deleteItemConfirm() {
             this.users.splice(this.editedIndex, 1)
             this.closeDelete()
@@ -297,14 +290,6 @@ export default {
 
         closeEdit() {
             this.edit = false
-            this.$nextTick(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
-                this.editedIndex = -1
-            })
-        },
-
-        closeDelete() {
-            this.dialogDelete = false
             this.$nextTick(() => {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
@@ -334,7 +319,7 @@ export default {
                         this.closeEdit()
                     }
                 }).catch(res => {
-                    this.responseMessageAPI(res.response.data.status, res.response.data.message)
+                    this.responseMessageAPI(res.response.data.code, res.response.data.message)
                 })
             } else {
                 this.$refs.form.validate()

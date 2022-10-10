@@ -1,5 +1,5 @@
 <template>
-<v-app id="inspire">
+<v-app id="inspire" class="main-viewer">
     <v-main class="grey lighten-3" style="align-items: center;">
         <v-container>
             <v-row>
@@ -138,6 +138,12 @@
 </v-app>
 </template>
 
+<style>
+.main-viewer {
+    margin-left: 250px;
+}
+</style>
+
 <script>
 import Rentals from "../services/rentals"
 import Books from "../services/books"
@@ -261,7 +267,6 @@ export default {
                         rentalContent["returnDate"] = rentalContent["returnDate"].split("-").reverse().join("/")
                     }
                     rentalContent["entryDate"] = rentalContent["entryDate"].split("-").reverse().join("/")
-                    rentalContent["expirationDate"] = rentalContent["expirationDate"].split("-").reverse().join("/")
                     rentalContent["book"] = rentalContent["book"]["name"]
                     rentalContent["user"] = rentalContent["user"]["name"]
                     this.rentals.push(rentalContent)
@@ -401,7 +406,7 @@ export default {
             const selectedId = +event.composedPath()[2].firstChild.textContent
             Rentals.return(selectedId).then(response => {
                 this.listData()
-                this.responseMessageAPI(response.response.status, response.data.message)
+                this.responseMessageAPI(response.status, response.data.message)
             }).catch(res => {
                 this.responseMessageAPI(res.response.status, res.response.data.message)
             })
@@ -413,7 +418,7 @@ export default {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
-                    this.responseMessageAPI(res.response.data.code, res.response.data.message)
+                    this.responseMessageAPI(res.response.status, res.response.data.message)
                 })
                 this.closeCreate()
             } else {
