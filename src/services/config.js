@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const http = axios.create({
-    baseURL: 'http://localhost:8090/api/v1/'
+    baseURL: 'https://fs-book-manager.herokuapp.com/api/v1/'
 })
