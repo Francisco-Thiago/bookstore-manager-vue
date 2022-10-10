@@ -329,7 +329,7 @@ export default {
                         this.closeEdit()
                     }
                 }).catch(res => {
-                    this.responseMessageAPI(res.response.data.status, res.response.data.message)
+                    this.responseMessageAPI(res.response.data.code, res.response.data.message)
                 })
             } else {
                 this.$refs.form.validate()

@@ -261,7 +261,6 @@ export default {
                         rentalContent["returnDate"] = rentalContent["returnDate"].split("-").reverse().join("/")
                     }
                     rentalContent["entryDate"] = rentalContent["entryDate"].split("-").reverse().join("/")
-                    rentalContent["expirationDate"] = rentalContent["expirationDate"].split("-").reverse().join("/")
                     rentalContent["book"] = rentalContent["book"]["name"]
                     rentalContent["user"] = rentalContent["user"]["name"]
                     this.rentals.push(rentalContent)
@@ -401,7 +400,7 @@ export default {
             const selectedId = +event.composedPath()[2].firstChild.textContent
             Rentals.return(selectedId).then(response => {
                 this.listData()
-                this.responseMessageAPI(response.response.status, response.data.message)
+                this.responseMessageAPI(response.status, response.data.message)
             }).catch(res => {
                 this.responseMessageAPI(res.response.status, res.response.data.message)
             })
@@ -413,7 +412,7 @@ export default {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
-                    this.responseMessageAPI(res.response.data.code, res.response.data.message)
+                    this.responseMessageAPI(res.response.status, res.response.data.message)
                 })
                 this.closeCreate()
             } else {
