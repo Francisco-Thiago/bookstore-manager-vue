@@ -287,7 +287,7 @@ export default {
                             this.listData()
                             this.responseMessageAPI(response.status, response.data.message)
                         }).catch(response => {
-                            this.responseMessageAPI(response.response.data.status, response.response.data.message)
+                            this.responseMessageAPI(response.response.status, response.response.data.message)
                         })
                     }
                 }
@@ -301,9 +301,14 @@ export default {
 
             Users.listAll().then(response => {
                 response.data.content.map(userContent => {
+                    userContent["registrationDate"] = userContent["registrationDate"].split("-").reverse().join("/")
                     userContent["role"] != "USER" ? this.users.push(userContent) : ""
                 })
             })
+        },
+
+        loginRedirect() {
+            window.location.pathname = '/login'
         },
 
         editItem(item) {
@@ -393,7 +398,6 @@ export default {
                         this.closeEdit()
                     }
                 }).catch(res => {
-                    console.log(res)
                     this.responseMessageAPI(res.response.data.status, res.response.data.message)
                 })
             } else {
@@ -415,17 +419,31 @@ export default {
                     'info'
                 )
             } else if (code >= 400 && code < 500) {
-                Swal.fire(
-                    'Um erro inesperado ocorreu!',
-                    `${message}`,
-                    'error'
-                )
-            } else if (code >= 500 && code < 600) {
                 Swal.fire({
-                    title: `Um problema delicado ocorreu.`,
+                    title: `Um erro inesperado ocorreu`,
                     text: `${message}`,
                     icon: 'error',
-                    footer: `<a href="mailto:vieirathiago779@gmail.com" target="_blank">Contate-me através deste email </a>`
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Fazer login',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.loginRedirect()
+                    }
+                })
+            } else if (code >= 500 && code < 600) {
+                Swal.fire({
+                    title: `Um erro inesperado ocorreu.`,
+                    text: `${message}`,
+                    icon: 'error',
+                    footer: `<a href="mailto:vieirathiago779@gmail.com" target="_blank">Contate-me através deste email </a>`,
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Fazer login',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.loginRedirect()
+                    }
                 })
             }
         }

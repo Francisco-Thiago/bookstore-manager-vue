@@ -1,22 +1,23 @@
 <template>
 <v-app>
 
-    <v-app-bar v-if="verifyRouter()" app color="pink" flat>
-        <v-container class="py-0 fill-height">
+    <header class="menu" v-if="verifyRouter()" app flat>
+        <v-container class="menu-container py-0 fill-height">
             <router-link to="/">
                 <v-img max-height="60" max-width="80" src="../src/assets/logo.svg" link></v-img>
             </router-link>
-            <v-spacer></v-spacer>
-            <v-btn class="menu-item" v-for="link of links" :key="link.item" :to="link.route" link text>
-                {{ link.item }}
-            </v-btn>
-            <v-spacer></v-spacer>
+
+            <div class="group-button">
+                <router-link v-for="link of links" :key="link.item" :to="link.route">
+                    <span class="menu-button">{{ link.item }}</span>
+                </router-link>
+            </div>
             <v-btn to="login" dark>
                 Login
             </v-btn>
         </v-container>
-    </v-app-bar>
-    <router-view />
+    </header>
+    <router-view class="main-viewer" />
 </v-app>
 </template>
 
@@ -77,14 +78,64 @@ div .ion {
     margin: 0;
 }
 
-html,
+html, body, .v-application--wrap,
 .main-content {
     background-color: #1f1f1f;
     font-family: 'Big John PRO';
 }
 
+.main-viewer {
+    margin-left: 250px;
+}
+
 a {
     text-decoration: none;
+    color: #fff;
+}
+
+.menu {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    z-index: 1;
+    background-color: #1f1f1f;
+}
+
+.group-button {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.menu-button {
+    display: block;
+    font-family: 'Big John PRO';
+    text-align: center;
+    font-size: 1.15rem;
+    color: white;
+    padding: .8rem;
+    width: 200px;
+    color: white;
+    background-color: #2e2c2cdb;
+    border-radius: 10px;
+}
+
+.selected {
+    color: rgb(235, 107, 128);
+}
+
+.menu-button:hover {
+    color: rgb(235, 107, 128);
+}
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.menu-item {
+    color: #fff;
 }
 
 .label-icon {

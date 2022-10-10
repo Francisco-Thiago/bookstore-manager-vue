@@ -264,6 +264,7 @@ export default {
 
             Users.listAll().then(response => {
             response.data.content.map(userContent => {
+                userContent["registrationDate"] = userContent["registrationDate"].split("-").reverse().join("/")
                 userContent["role"] != "ADMIN" ? this.users.push(userContent) : ""
             })
         })
@@ -333,7 +334,6 @@ export default {
                         this.closeEdit()
                     }
                 }).catch(res => {
-                    console.log(res)
                     this.responseMessageAPI(res.response.data.status, res.response.data.message)
                 })
             } else {

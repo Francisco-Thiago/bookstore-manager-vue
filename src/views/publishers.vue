@@ -300,6 +300,7 @@ export default {
 
             Publishers.listAll().then(response => {
                 response.data.content.map(e => {
+                    e["registrationDate"] = e["registrationDate"].split("-").reverse().join("/")
                     this.publishers.push(e)
                 })
             })

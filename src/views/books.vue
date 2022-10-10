@@ -402,6 +402,8 @@ export default {
             Books.listAll().then(response => {
                 response.data.content.map(e => {
                     e["publisher"] = e["publisher"]["name"]
+                    e["changeDate"] = e["changeDate"].split("-").reverse().join("/")
+                    e["release"] = e["release"].split("-").reverse().join("/")
                     this.books.push(e)
                 })
             })

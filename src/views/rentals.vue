@@ -257,6 +257,11 @@ export default {
 
             Rentals.listAll().then(response => {
                 response.data.content.map(rentalContent => {
+                    if(rentalContent["returnDate"] != null) {
+                        rentalContent["returnDate"] = rentalContent["returnDate"].split("-").reverse().join("/")
+                    }
+                    rentalContent["entryDate"] = rentalContent["entryDate"].split("-").reverse().join("/")
+                    rentalContent["expirationDate"] = rentalContent["expirationDate"].split("-").reverse().join("/")
                     rentalContent["book"] = rentalContent["book"]["name"]
                     rentalContent["user"] = rentalContent["user"]["name"]
                     this.rentals.push(rentalContent)
