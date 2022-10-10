@@ -17,7 +17,7 @@
             </v-btn>
         </v-container>
     </header>
-    <router-view class="main-viewer" />
+    <router-view />
 </v-app>
 </template>
 
@@ -82,10 +82,6 @@ html, body, .v-application--wrap,
 .main-content {
     background-color: #1f1f1f;
     font-family: 'Big John PRO';
-}
-
-.main-viewer {
-    margin-left: 250px;
 }
 
 a {

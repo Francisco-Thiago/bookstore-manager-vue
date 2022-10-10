@@ -1,5 +1,5 @@
 <template>
-<v-app id="inspire">
+<v-app id="inspire" class="main-viewer">
     <v-main class="grey lighten-3" style="align-items: center;">
         <v-container>
             <v-row>
@@ -116,6 +116,12 @@
     </v-main>
 </v-app>
 </template>
+
+<style>
+.main-viewer {
+    margin-left: 250px;
+}
+</style>
 
 <script>
 import {
