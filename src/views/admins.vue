@@ -140,6 +140,9 @@
 </template>
 
 <style>
+a {
+    color: black;
+}
 .main-viewer {
     margin-left: 250px;
 }
@@ -383,7 +386,11 @@ export default {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
-                    this.responseMessageAPI(res.response.data.status, res.response.data.message)
+                    if(res.response.data.message) {
+                        this.responseMessageAPI(res.response.data.code, res.response.data.message)
+                    }else {
+                        this.responseMessageAPI(res.response.data.status, "Erro interno no servidor. Faça login novamente.")
+                    }
                 })
                 this.closeCreate()
             } else {
@@ -404,8 +411,11 @@ export default {
                         this.closeEdit()
                     }
                 }).catch(res => {
-                    console.log(res)
-                    this.responseMessageAPI(res.response.data.code, res.response.data.message)
+                    if(res.response.data.message) {
+                        this.responseMessageAPI(500, res.response.data.message)
+                    }else {
+                        this.responseMessageAPI(500, "Erro interno no servidor. Faça login novamente.")
+                    }
                 })
             } else {
                 this.$refs.form.validate()
