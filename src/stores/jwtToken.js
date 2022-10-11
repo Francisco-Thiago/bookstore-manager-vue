@@ -16,12 +16,14 @@ export const jwtToken = defineStore("jwtToken", {
                 username: username.toUpperCase().trim(),
                 password: password.trim()
             }).then(res => {
+                console.log(res)
                 this.responseMessageAPI(res.status, "Autenticado com sucesso.")
                 const { jwtToken } = res.data
                 localStorage.setItem('token', jwtToken)
                 this.$state.jwtToken = localStorage.getItem('token')
             }).catch(res => {
-                this.responseMessageAPI(res.response.status, "Usuário inválido.")
+                console.log(res)
+                this.responseMessageAPI(500, "Usuário inválido.")
             })
         },
         responseMessageAPI(code, message) {
