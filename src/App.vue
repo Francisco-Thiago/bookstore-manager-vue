@@ -73,6 +73,11 @@ export default {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Big John PRO', 'Montserrat', sans-serif;
+}
+
+input {
+    font-family: 'Big John PRO', 'Montserrat', sans-serif;
 }
 
 div .ion {
