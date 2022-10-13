@@ -2,23 +2,22 @@
 <main>
     <form class="main-content" @submit.prevent="handleSubmit">
         <div class="welcome">
-            <h1><img src="../img/login.svg" alt="profile">Login</h1>
-            <p>Seja bem-vindo(a)!</p>
+            <h1>Esqueceu a senha?</h1>
         </div>
         <div class="input-group">
             <label class="label-icon">
-                <IosPerson class="icon" />
-                <input type="text" v-model="username" placeholder="Digite seu username" class="input-text" required>
+                <IosKey class="icon" />
+                <input type="password" v-model="newPassword" placeholder="Digite sua senha" class="input-text" required>
             </label>
             <label class="label-icon">
                 <IosKey class="icon" />
-                <input type="password" v-model="password" placeholder="Digite sua senha" class="input-text" required>
+                <input type="password" v-model="repeatPassword" placeholder="Digite novamente" class="input-text" required>
             </label>
-            <router-link to="forget">
-                <span class="forget-route">Esqueceu sua senha? Clique aqui</span>
-            </router-link>
         </div>
-        <input type="submit" class="button" value="Fazer login">
+        <input type="submit" class="button" value="Alterar senha">
+        <router-link to="/">
+            <span class="login-return">Fazer login</span>
+        </router-link>
     </form>
 </main>
 </template>
@@ -44,10 +43,15 @@ html,
     font-family: 'Big John PRO';
 }
 
-a, .forget-route {
-    color: rgb(231, 85, 109);
+a {
+    color: #000;
     text-decoration: none;
 }
+
+.login-return {
+    color: rgb(231, 85, 109);
+}
+
 
 .label-icon {
     position: relative;
@@ -62,36 +66,6 @@ a, .forget-route {
     fill: #fff;
 }
 
-.close {
-    cursor: pointer;
-    display: grid;
-    place-content: center;
-    position: absolute;
-    background-color: transparent;
-    border: .2rem solid #fff;
-    border-radius: 50px;
-    color: #fff;
-    width: 50px;
-    height: 50px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    top: 1.5rem;
-    right: 1.5rem;
-    transition: all .5s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.close-icon {
-    display: block;
-    fill: #fff;
-    font-size: 2rem;
-
-}
-
-.close:hover {
-    border-color: rgb(231, 85, 109);
-    background-color: rgb(231, 85, 109);
-}
-
 .main-content {
     display: flex;
     justify-content: center;
@@ -103,7 +77,6 @@ a, .forget-route {
     color: #fff;
     padding: 1rem;
 }
-
 
 .welcome {
     text-align: center;
@@ -179,18 +152,17 @@ a, .forget-route {
 }
 </style>
 
-    
 <script>
+import Swal from 'sweetalert2'
 import {
     jwtToken
 } from "../stores/jwtToken"
 import IosKey from "../../node_modules/vue-ionicons/dist/ios-key.vue";
-import IosPerson from "../../node_modules/vue-ionicons/dist/ios-person.vue";
 export default {
     name: "App",
     data: () => ({
-        username: '',
-        password: '',
+        repeatPassword: '',
+        newPassword: '',
         jwtToken: jwtToken(),
         links: [{
             item: "Dashboard",
@@ -211,12 +183,19 @@ export default {
     }),
     methods: {
         handleSubmit() {
-            this.jwtToken.newToken(this.username, this.password)
+            if (this.newPassword.trim().length != 0 && this.newPassword.trim() == this.repeatPassword.trim()) {
+                this.jwtToken.forget(this.newPassword.trim())
+            } else {
+                Swal.fire(
+                    'Informações inválidas',
+                    'Digite corretamente seus dados.',
+                    'error'
+                )
+            }
         }
     },
     components: {
-        IosKey,
-        IosPerson
+        IosKey
     }
 };
 </script>

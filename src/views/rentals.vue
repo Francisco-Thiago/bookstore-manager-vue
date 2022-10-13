@@ -145,6 +145,9 @@
 </style>
 
 <script>
+import {
+    jwtToken
+} from "@/stores/jwtToken"
 import Rentals from "../services/rentals"
 import Books from "../services/books"
 import Users from "../services/users"
@@ -154,6 +157,7 @@ export default {
 
     data() {
         return {
+            token: jwtToken(),
             rentals: [],
             booksTitle: [],
             usersName: [],
@@ -261,7 +265,7 @@ export default {
                 this.books = []
             }
 
-            Rentals.listAll().then(response => {
+            Rentals.listAll(this.token.jwtToken).then(response => {
                 response.data.content.map(rentalContent => {
                     if(rentalContent["returnDate"] != null) {
                         rentalContent["returnDate"] = rentalContent["returnDate"].split("-").reverse().join("/")
@@ -271,9 +275,11 @@ export default {
                     rentalContent["user"] = rentalContent["user"]["name"]
                     this.rentals.push(rentalContent)
                 })
+            }).catch(() => {
+                window.location.pathname = '/'
             })
 
-            Books.listAll().then(response => {
+            Books.listAll(this.token.jwtToken).then(response => {
                 response.data.content.map(bookContent => {
                     if (bookContent["quantity"] > 0) {
                         this.booksTitle.push(bookContent["name"])
@@ -283,9 +289,11 @@ export default {
                         })
                     }
                 })
+            }).catch(() => {
+                window.location.pathname = '/'
             })
 
-            Users.listAll().then(response => {
+            Users.listAll(this.token.jwtToken).then(response => {
                 response.data.content.map(userContent => {
                     if (userContent["role"] != "ADMIN") {
                         this.usersName.push(userContent["name"])
@@ -295,6 +303,8 @@ export default {
                         })
                     }
                 })
+            }).catch(() => {
+                window.location.pathname = '/'
             })
 
         },
@@ -332,7 +342,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (selectedId > 0) {
-                        Rentals.delete(selectedId).then(response => {
+                        Rentals.delete(selectedId, this.token.jwtToken).then(response => {
                             this.listData()
                             this.responseMessageAPI(response.status, response.data.message)
                         }).catch(response => {
@@ -404,7 +414,7 @@ export default {
 
         returnBook(event) {
             const selectedId = +event.composedPath()[2].firstChild.textContent
-            Rentals.return(selectedId).then(response => {
+            Rentals.return(selectedId, this.token.jwtToken).then(response => {
                 this.listData()
                 this.responseMessageAPI(response.status, response.data.message)
             }).catch(res => {
@@ -414,7 +424,7 @@ export default {
 
         post() {
             if (this.valid) {
-                Rentals.save(this.buildJson(this.createdItem)).then(res => {
+                Rentals.save(this.buildJson(this.createdItem), this.token.jwtToken).then(res => {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
@@ -428,7 +438,7 @@ export default {
 
         put() {
             if (this.valid) {
-                Rentals.expiration(this.editedItem.id, this.editedItem).then(response => {
+                Rentals.expiration(this.editedItem.id, this.editedItem, this.token.jwtToken).then(response => {
                     this.listData()
                     this.responseMessageAPI(response.status, response.data.message)
                     if (response.status >= 200 && response.status < 300) {

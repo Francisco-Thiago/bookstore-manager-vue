@@ -4,7 +4,7 @@ import Users from "../services/users"
 
 export const jwtToken = defineStore("jwtToken", {
     state: () => {
-        return { jwtToken: localStorage.getItem('token') || '' }
+        return { jwtToken: localStorage.getItem('token') || ''}
     },
     actions: {
         clearToken() {
@@ -16,13 +16,24 @@ export const jwtToken = defineStore("jwtToken", {
                 username: username.toUpperCase().trim(),
                 password: password.trim()
             }).then(res => {
-                console.log(res)
                 this.responseMessageAPI(res.status, "Autenticado com sucesso.")
                 const { jwtToken } = res.data
                 localStorage.setItem('token', jwtToken)
                 this.$state.jwtToken = localStorage.getItem('token')
-            }).catch(res => {
-                console.log(res)
+                setTimeout(() => {
+                    this.allow = true
+                    window.location.pathname = '/dashboard'
+                } ,2000)
+            }).catch(() => {
+                this.responseMessageAPI(500, "Usuário inválido.")
+            })
+        },
+        forget(password) {
+            Users.updateAdmin({
+                "password": password
+            }).then(res => {
+                this.responseMessageAPI(res.status, res.data.message)
+            }).catch(() => {
                 this.responseMessageAPI(500, "Usuário inválido.")
             })
         },
@@ -37,9 +48,7 @@ export const jwtToken = defineStore("jwtToken", {
                     color: '#5bf52d',
                     background: '#2e2c2c',
                     timer: 1500
-                })
-                setTimeout(() => {this.login = false}, 1000)
-                
+                })                
             } else if (code >= 300 && code < 400) {
                 Swal.fire(
                     'Psiu!',

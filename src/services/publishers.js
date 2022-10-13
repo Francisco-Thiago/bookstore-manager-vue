@@ -1,23 +1,43 @@
 import { http } from './config'
 
 export default {
-    listAll: () => {
-        return http.get('publishers');
+    listAll: (token) => {
+        return http.get('publishers', {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
     },
 
-    findById: (id) => {
-        return http.get(`publishers/${id}`);
+    findById: (id, token) => {
+        return http.get(`publishers/${id}`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
     },
 
-    save: (publisher) => {
-        return http.post('publishers', publisher);
+    save: (publisher, token) => {
+        return http.post('publishers', publisher, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
     },
 
-    update: (id, publisher) => {
-        return http.put(`publishers/${id}`, publisher)
+    update: (id, publisher, token) => {
+        return http.put(`publishers/${id}`, publisher, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     },
 
-    delete: (id) => {
-        return http.delete(`publishers/${id}`)
+    delete: (id, token) => {
+        return http.delete(`publishers/${id}`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     }
 }

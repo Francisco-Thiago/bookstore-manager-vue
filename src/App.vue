@@ -12,9 +12,7 @@
                     <span class="menu-button">{{ link.item }}</span>
                 </router-link>
             </div>
-            <v-btn to="login" dark>
-                Login
-            </v-btn>
+            <p style="color: #fff;">Seja bem-vindo(a)!</p>
         </v-container>
     </header>
     <router-view />
@@ -34,7 +32,7 @@ export default {
         login: false,
         links: [{
             item: "Dashboard",
-            route: "/"
+            route: "/dashboard"
         }, {
             item: "Editoras",
             route: "/publishers"
@@ -47,17 +45,21 @@ export default {
         }, {
             item: "Usuarios",
             route: "/users"
-        }, {
-            item: "Admins",
-            route: "/admins"
         }]
     }),
     methods: {
         handleSubmit() {
             this.jwtToken.newToken(this.username, this.password)
         },
+
         verifyRouter(route = window.location.pathname) {
-            return route != '/login'
+            let isTrue = false;
+            this.links.map(link => {
+                if(link.route == route) {
+                    isTrue = true
+                }
+            })
+            return isTrue
         }
     },
 };

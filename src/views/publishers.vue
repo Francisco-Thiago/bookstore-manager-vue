@@ -4,7 +4,7 @@
         <v-container>
             <v-row>
                 <v-col>
-                    <v-sheet max-height="70vh" rounded="lg">
+                    <v-sheet rounded="lg">
                         <v-data-table :headers="headers" :items="publishers" :search="search" height="50vh" item-height="20" sort-by="id" class="elevation-1">
                             <template v-slot:top>
                                 <v-toolbar flat>
@@ -125,40 +125,21 @@
 
 <script>
 import {
-    validationMixin
-} from 'vuelidate'
-import {
-    required,
-    maxLength,
-    email
-} from 'vuelidate/lib/validators'
+    jwtToken
+} from "@/stores/jwtToken"
 import Publishers from "../services/publishers"
 import Swal from 'sweetalert2'
 
 export default {
-    mixins: [validationMixin],
 
-    validations: {
-        name: {
-            required,
-            maxLength: maxLength(100)
-        },
-        email: {
-            required,
-            email
-        },
-        select: {
-            required
-        }
-    },
     data() {
         return {
+            token: jwtToken(),
             publishers: [],
             bookTitle: [],
             search: '',
             create: false,
             edit: false,
-            dialogDelete: false,
             headers: [{
                     text: 'Id',
                     align: 'start',
@@ -219,20 +200,29 @@ export default {
                 v => v.length <= 50 || 'Quantidade máxima de cacteres excedida!',
             ],
         }
+
     },
 
     watch: {
+        create(val) {
+            val || this.closeCreate()
+        },
+        edit(val) {
+            val || this.closeEdit()
+        },
         dialogDelete(val) {
             val || this.closeDelete()
-        }
+        },
     },
 
     mounted() {
         this.listData()
     },
     methods: {
+
         deleteAlert(event) {
             const selectedId = event.composedPath()[2].firstChild.textContent
+
             Swal.fire({
                 title: 'Você tem certeza?',
                 text: "Esta ação é irreversível, tem certeza que deseja excluir?",
@@ -245,7 +235,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (selectedId > 0) {
-                        Publishers.delete(selectedId).then(response => {
+                        Publishers.delete(selectedId, this.token.jwtToken).then(response => {
                             this.listData()
                             this.responseMessageAPI(response.status, response.data.message)
                         }).catch(response => {
@@ -254,7 +244,6 @@ export default {
                     }
                 }
             })
-
         },
 
         editItem(item) {
@@ -298,23 +287,9 @@ export default {
             })
         },
 
-
-        listData() {
-            if (this.publishers.length > 0) {
-                this.publishers = []
-            }
-
-            Publishers.listAll().then(response => {
-                response.data.content.map(e => {
-                    e["registrationDate"] = e["registrationDate"].split("-").reverse().join("/")
-                    this.publishers.push(e)
-                })
-            })
-        },
-
         post() {
             if (this.valid) {
-                Publishers.save(this.createdItem).then(res => {
+                Publishers.save(this.createdItem, this.token.jwtToken).then(res => {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
@@ -328,10 +303,10 @@ export default {
 
         put() {
             if (this.valid) {
-                Publishers.update(this.editedItem.id, this.editedItem).then(response => {
+                Publishers.update(this.editedItem.id, this.editedItem, this.token.jwtToken).then(response => {
                     this.listData()
                     this.responseMessageAPI(response.status, response.data.message)
-                    if(response.status >= 200 && response.status < 300) {
+                    if (response.status >= 200 && response.status < 300) {
                         this.closeEdit()
                     }
                 }).catch(res => {
@@ -340,6 +315,21 @@ export default {
             } else {
                 this.$refs.form.validate()
             }
+        },
+
+        listData() {
+            if (this.publishers.length > 0) {
+                this.publishers = []
+            }
+
+            Publishers.listAll(this.token.jwtToken).then(response => {
+                response.data.content.map(e => {
+                    e["registrationDate"] = e["registrationDate"].split("-").reverse().join("/")
+                    this.publishers.push(e)
+                })
+            }).catch(() => {
+                window.location.pathname = '/'
+            })
         },
 
         responseMessageAPI(code, message) {

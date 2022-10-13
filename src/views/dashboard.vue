@@ -201,7 +201,7 @@ export default {
 
     data() {
         return {
-            jwtToken: jwtToken(),
+            token: jwtToken(),
             bookQuantity: 0,
             rentalQuantity: 0,
             userQuantity: 0,
@@ -238,7 +238,7 @@ export default {
 
     methods: {
         listData() {
-            Rentals.listAll().then(response => {
+            Rentals.listAll(this.token.jwtToken).then(response => {
                 this.rentalQuantity = response.data.content.length
                 this.counter()
                 response.data.content.map(rental => {
@@ -248,18 +248,20 @@ export default {
                 })
                 this.fiveBooks(this.books)
                 this.fivePublishers(this.publishers)
+            }).catch(() => {
+                window.location.pathname = '/'
             })
         },
 
         counter() {
-            Books.listAll().then(response => {
+            Books.listAll(this.token.jwtToken).then(response => {
                 this.bookQuantity = response.data.content.length
             })
-            Publishers.listAll().then(response => {
+            Publishers.listAll(this.token.jwtToken).then(response => {
                 this.publisherQuantity = response.data.content.length
             })
-            Users.listAll().then(response => {
-                this.userQuantity = response.data.content.length
+            Users.listAll(this.token.jwtToken).then(response => {
+                this.userQuantity = response.data.content.length -1
             })
         },
 
@@ -307,7 +309,7 @@ export default {
                 })
             }
             this.mainBooksId.map(id => {
-                Books.findById(id).then(books => {
+                Books.findById(id, this.token.jwtToken).then(books => {
                     this.chartData.labels.push(books.data.name)
                 }).finally(() => {
                     this.visibleData = true
@@ -359,7 +361,7 @@ export default {
                 })
             }
             this.mainPublishersId.map(id => {
-                Publishers.findById(id).then(publisher => {
+                Publishers.findById(id, this.token.jwtToken).then(publisher => {
                     this.doughnutData.labels.push(publisher.data.name)
                 }).finally(() => {
                     this.visibleDataDoghnut = true

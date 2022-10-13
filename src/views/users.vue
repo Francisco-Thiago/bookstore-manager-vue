@@ -130,6 +130,9 @@
 </style>
 
 <script>
+import {
+    jwtToken
+} from "@/stores/jwtToken"
 import Users from "../services/users"
 import Swal from 'sweetalert2'
 
@@ -137,6 +140,7 @@ export default {
 
     data() {
         return {
+            token: jwtToken(),
             users: [],
             search: '',
             create: false,
@@ -245,7 +249,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (selectedId > 0) {
-                        Users.deleteUser(selectedId).then(response => {
+                        Users.deleteUser(selectedId, this.token.jwtToken).then(response => {
                             this.listData()
                             this.responseMessageAPI(response.status, response.data.message)
                         }).catch(response => {
@@ -261,12 +265,14 @@ export default {
                 this.users = []
             }
 
-            Users.listAll().then(response => {
-            response.data.content.map(userContent => {
-                userContent["registrationDate"] = userContent["registrationDate"].split("-").reverse().join("/")
-                userContent["role"] != "ADMIN" ? this.users.push(userContent) : ""
+            Users.listAll(this.token.jwtToken).then(response => {
+                response.data.content.map(userContent => {
+                    userContent["registrationDate"] = userContent["registrationDate"].split("-").reverse().join("/")
+                    userContent["role"] != "ADMIN" ? this.users.push(userContent) : ""
+                })
+            }).catch(() => {
+                window.location.pathname = '/'
             })
-        })
         },
 
         editItem(item) {
@@ -298,7 +304,7 @@ export default {
 
         post() {
             if (this.valid) {
-                Users.saveUser(this.createdItem).then(res => {
+                Users.saveUser(this.createdItem, this.token.jwtToken).then(res => {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
@@ -312,10 +318,10 @@ export default {
 
         put() {
             if (this.valid) {
-                Users.updateUser(this.editedItem.id, this.editedItem).then(response => {
+                Users.updateUser(this.editedItem.id, this.editedItem, this.token.jwtToken).then(response => {
                     this.listData()
                     this.responseMessageAPI(response.status, response.data.message)
-                    if(response.status >= 200 && response.status < 300) {
+                    if (response.status >= 200 && response.status < 300) {
                         this.closeEdit()
                     }
                 }).catch(res => {

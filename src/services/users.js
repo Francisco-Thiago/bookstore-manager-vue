@@ -5,35 +5,52 @@ export default {
         return http.post("users/authenticate", user)
     },
 
-    listAll: () => {
-        return http.get("users")
+    listAll: (token) => {
+        return http.get("users", {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     },
 
-    findById: (id) => {
-        return http.get(`users/${id}`);
+    findById: (id, token) => {
+        return http.get(`users/${id}`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
     },
 
-    saveUser: (user) => {
-        return http.post('users/user', user)
+    saveUser: (user, token) => {
+        return http.post('users/user', user, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     },
 
-    saveAdmin: (admin, header) => {
-        return http.post('users/admin', admin, header)
+    updateUser: (id, user, token) => {
+        return http.put(`users/user/${id}`, user, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     },
 
-    updateUser: (id, user) => {
-        return http.put(`users/user/${id}`, user)
+    updateAdmin: (admin, token) => {
+        return http.put(`users/admin`, admin, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     },
 
-    updateAdmin: (id, admin, header) => {
-        return http.put(`users/admin/${id}`, admin, header)
+    deleteUser: (id, token) => {
+        return http.delete(`users/user/${id}`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     },
 
-    deleteUser: (id) => {
-        return http.delete(`users/user/${id}`)
-    },
-
-    deleteAdmin: (id, header) => {
-        return http.delete(`users/admin/${id}`, header)
-    }
 }
