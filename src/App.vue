@@ -66,6 +66,8 @@ export default {
 </script>
 
 <style>
+@import url('http://fonts.cdnfonts.com/css/big-john-pro');
+
 * {
     margin: 0;
     padding: 0;
@@ -83,7 +85,7 @@ div .ion {
 html, body, .v-application--wrap,
 .main-content {
     background-color: #1f1f1f;
-    font-family: 'Big John PRO';
+    font-family: 'Big John PRO', sans-serif;
 }
 
 a {
