@@ -37,12 +37,8 @@ export default {
         })
     },
 
-    updateAdmin: (admin, token) => {
-        return http.put(`users/admin`, admin, {
-            headers: {
-                Authorization: "Bearer " + token
-            }
-        })
+    updateAdmin: (admin) => {
+        return http.put(`users/admin`, admin)
     },
 
     deleteUser: (id, token) => {
