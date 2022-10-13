@@ -269,6 +269,7 @@ export default {
             let repeat = 1,
                 repeats = []
 
+            bookIds = bookIds.sort((a, b) => b - a)
             for (let i = 0; i < this.books.length; i++) {
                 if (bookIds[i] == bookIds[i + 1]) {
                     repeat += 1
@@ -321,6 +322,7 @@ export default {
             let repeat = 1,
                 repeats = []
 
+            publisherIds = publisherIds.sort((a, b) => b - a)
             for (let i = 0; i < this.publishers.length; i++) {
                 if (this.publishers[i] == this.publishers[i + 1]) {
                     repeat += 1
