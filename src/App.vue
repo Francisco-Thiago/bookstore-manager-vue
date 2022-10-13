@@ -67,6 +67,7 @@ export default {
 
 <style>
 @import url('http://fonts.cdnfonts.com/css/big-john-pro');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 * {
     margin: 0;
@@ -85,7 +86,7 @@ div .ion {
 html, body, .v-application--wrap,
 .main-content {
     background-color: #1f1f1f;
-    font-family: 'Big John PRO', sans-serif;
+    font-family: 'Big John PRO', 'Montserrat', sans-serif;
 }
 
 a {
