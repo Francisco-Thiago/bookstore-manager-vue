@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/dashboard',
     name: 'dashboard',
     component: () => import('../views/dashboard.vue')
   },
@@ -30,14 +30,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/users.vue')
   },
   {
-    path: '/admins',
-    name: 'admins',
-    component: () => import(/* webpackChunkName: "about" */ '../views/admins.vue')
-  },
-  {
-    path: '/login',
+    path: '/',
     name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
+  },
+  {
+    path: '/forget',
+    name: 'forget',
+    component: () => import(/* webpackChunkName: "about" */ '../views/forget.vue')
   }
 ]
 

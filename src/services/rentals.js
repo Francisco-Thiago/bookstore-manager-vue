@@ -1,27 +1,51 @@
 import { http } from './config'
 
 export default {
-    listAll: () => {
-        return http.get('rentals');
+    listAll: (token) => {
+        return http.get('rentals', {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
     },
 
-    findById: (id) => {
-        return http.get(`rentals/${id}`);
+    findById: (id, token) => {
+        return http.get(`rentals/${id}`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
     },
 
-    save: (rental) => {
-        return http.post('rentals', rental);
+    save: (rental, token) => {
+        return http.post('rentals', rental, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
     },
 
-    expiration: (id, rental) => {
-        return http.put(`rentals/expiration/${id}`, rental)
+    expiration: (id, rental, token) => {
+        return http.put(`rentals/expiration/${id}`, rental, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+    },
+    
+    return: (id, token) => {
+        return http.put(`rentals/return/${id}`, {}, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     },
 
-    return: (id) => {
-        return http.put(`rentals/return/${id}`)
-    },
-
-    delete: (id) => {
-        return http.delete(`rentals/${id}`)
+    delete: (id, token) => {
+        return http.delete(`rentals/${id}`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
     }
 }

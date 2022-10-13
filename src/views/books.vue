@@ -133,7 +133,16 @@
 </v-app>
 </template>
 
+<style>
+.main-viewer {
+    margin-left: 250px;
+}
+</style>
+
 <script>
+import {
+    jwtToken
+} from "@/stores/jwtToken"
 import Books from "../services/books"
 import Publishers from "../services/publishers"
 import Swal from 'sweetalert2'
@@ -142,6 +151,7 @@ export default {
 
     data() {
         return {
+            token: jwtToken(),
             books: [],
             publishers: [],
             publisherName: [],
@@ -256,7 +266,7 @@ export default {
     },
 
     mounted() {
-        this.listData();
+        this.listData()
     },
     methods: {
 
@@ -275,7 +285,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (selectedId > 0) {
-                        Books.delete(selectedId).then(response => {
+                        Books.delete(selectedId, this.token.jwtToken).then(response => {
                             this.listData()
                             this.responseMessageAPI(response.status, response.data.message)
                         }).catch(response => {
@@ -329,7 +339,7 @@ export default {
 
         post() {
             if (this.valid) {
-                Books.save(this.buildJson(this.createdItem), 'create').then(res => {
+                Books.save(this.buildJson(this.createdItem, 'create'), this.token.jwtToken).then(res => {
                     this.listData()
                     this.responseMessageAPI(res.status, res.data.message)
                 }).catch(res => {
@@ -343,7 +353,7 @@ export default {
 
         put() {
             if (this.valid) {
-                Books.update(this.editedItem.id, this.buildJson(this.editedItem, 'edit')).then(response => {
+                Books.update(this.editedItem.id, this.buildJson(this.editedItem, 'edit'), this.token.jwtToken).then(response => {
                     this.listData()
                     this.responseMessageAPI(response.status, response.data.message)
                     if(response.status >= 200 && response.status < 300) {
@@ -398,17 +408,18 @@ export default {
                 this.publishers = []
                 this.books = []
             }
-
-            Books.listAll().then(response => {
+            Books.listAll(this.token.jwtToken).then(response => {
                 response.data.content.map(e => {
                     e["publisher"] = e["publisher"]["name"]
                     e["changeDate"] = e["changeDate"].split("-").reverse().join("/")
                     e["release"] = e["release"].split("-").reverse().join("/")
                     this.books.push(e)
                 })
+            }).catch(() => {
+                window.location.pathname = '/'
             })
 
-            Publishers.listAll().then(response => {
+            Publishers.listAll(this.token.jwtToken).then(response => {
                 response.data.content.map(e => {
                     this.publishers.push({
                         id: e["id"],
@@ -416,6 +427,8 @@ export default {
                     });
                     this.publisherName.push(e["name"])
                 })
+            }).catch(() => {
+                window.location.pathname = '/'
             })
         },
 
