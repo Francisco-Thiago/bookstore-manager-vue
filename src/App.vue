@@ -3,7 +3,7 @@
 
     <header class="menu" v-if="verifyRouter()" app flat>
         <v-container class="menu-container py-0 fill-height">
-            <router-link to="/">
+            <router-link to="/dashboard">
                 <v-img max-height="60" max-width="80" src="../src/assets/logo.svg" link></v-img>
             </router-link>
 
