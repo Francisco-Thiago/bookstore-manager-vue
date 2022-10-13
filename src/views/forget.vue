@@ -23,7 +23,7 @@
 </template>
 
 <style>
-@import url('http://fonts.cdnfonts.com/css/big-john-pro');
+
 * {
     margin: 0;
     padding: 0;
@@ -41,7 +41,7 @@ div .ion {
 html,
 .main-content {
     background-color: #1f1f1f;
-    font-family: 'Big John PRO', sans-serif;
+    font-family: 'Big John PRO', 'Montserrat', sans-serif;
 }
 
 a {
