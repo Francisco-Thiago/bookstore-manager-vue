@@ -44,8 +44,6 @@
                                                                         </v-btn>
                                                                     </v-date-picker>
                                                                 </v-menu>
-                                                                {{ expirationDateShow }}
-                                                                {{ createdItem.expirationDate }}
                                                             </v-col>
                                                         </v-row>
                                                         <v-row>
@@ -391,6 +389,7 @@ export default {
         editItem(item) {
             this.editedIndex = this.rentals.indexOf(item)
             this.editedItem = Object.assign({}, item)
+            this.editedItem.expirationDate = this.parseDate(this.editedItem.expirationDate) 
             this.edit = true
         },
 
