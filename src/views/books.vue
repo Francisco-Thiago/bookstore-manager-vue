@@ -137,6 +137,12 @@
 .main-viewer {
     margin-left: 250px;
 }
+
+@media (max-width: 750px) {
+    .main-viewer {
+        margin-left: 0;
+    }
+}
 </style>
 
 <script>
