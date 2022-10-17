@@ -1,7 +1,8 @@
 <template>
 <v-app>
-
     <header class="menu" v-if="verifyRouter()" app flat>
+        <span class="close" v-if="!barStatus" @click="closeMenu">
+            <IosClose class="close-icon" /></span>
         <v-container class="menu-container py-0 fill-height">
             <router-link to="/dashboard">
                 <v-img max-height="60" max-width="80" src="../src/assets/logo.svg" link></v-img>
@@ -15,6 +16,10 @@
             <p style="color: #fff;">Seja bem-vindo(a)!</p>
         </v-container>
     </header>
+    <v-app-bar v-if="barStatus" class="app-menu" absolute color="pink" elevate-on-scroll>
+        <v-app-bar-nav-icon @click="openMenu"></v-app-bar-nav-icon>
+        <v-toolbar-title>Bookstore Manager</v-toolbar-title>
+    </v-app-bar>
     <router-view />
 </v-app>
 </template>
@@ -23,11 +28,13 @@
 import {
     jwtToken
 } from "../src/stores/jwtToken"
+import IosClose from "vue-ionicons/dist/ios-close.vue";
 export default {
     name: "App",
     data: () => ({
-        username: '',
-        password: '',
+        username: "",
+        password: "",
+        barStatus: true,
         jwtToken: jwtToken(),
         login: false,
         links: [{
@@ -49,35 +56,46 @@ export default {
     }),
     methods: {
         handleSubmit() {
-            this.jwtToken.newToken(this.username, this.password)
+            this.jwtToken.newToken(this.username, this.password);
         },
-
         verifyRouter(route = window.location.pathname) {
             let isTrue = false;
             this.links.map(link => {
-                if(link.route == route) {
-                    isTrue = true
+                if (link.route == route) {
+                    isTrue = true;
                 }
-            })
-            return isTrue
+            });
+            return isTrue;
+        },
+        openMenu() {
+            const responsiveBar = document.querySelector('.menu')
+            responsiveBar.style.display = 'block'
+            this.barStatus = false
+        },
+        closeMenu() {
+            const responsiveBar = document.querySelector('.menu')
+            responsiveBar.style.display = 'none'
+            this.barStatus = true
         }
     },
+    components: {
+        IosClose
+    }
 };
 </script>
 
 <style>
-@import url('http://fonts.cdnfonts.com/css/big-john-pro');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Big John PRO', 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 input {
-    font-family: 'Big John PRO', 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 div .ion {
@@ -88,10 +106,16 @@ div .ion {
     margin: 0;
 }
 
-html, body, .v-application--wrap,
+html,
+body,
+.v-application--wrap,
 .main-content {
     background-color: #1f1f1f;
-    font-family: 'Big John PRO', 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.app-menu {
+    display: none;
 }
 
 a {
@@ -100,6 +124,7 @@ a {
 }
 
 .menu {
+    transition: all 1s cubic-bezier(0.6, -0.28, 0.735, 0.045);
     width: 250px;
     height: 100vh;
     position: fixed;
@@ -115,7 +140,7 @@ a {
 
 .menu-button {
     display: block;
-    font-family: 'Big John PRO';
+    font-family: 'Montserrat', sans-serif;
     text-align: center;
     font-size: 1.15rem;
     color: white;
@@ -131,7 +156,7 @@ a {
 }
 
 .menu-button:hover {
-    color: rgb(235, 107, 128);
+    color: #eb6b80;
 }
 
 .menu-container {
@@ -179,7 +204,6 @@ a {
     display: block;
     fill: #fff;
     font-size: 2rem;
-
 }
 
 .close:hover {
@@ -274,5 +298,31 @@ a {
     color: #fff;
     border-color: rgb(231, 85, 109);
     background-color: rgb(231, 85, 109);
+}
+
+@keyframes menu {
+    from {
+        left: -100%;
+    }
+
+    to {
+        left: 0;
+    }
+}
+
+@media (max-width: 750px) {
+    .app-menu {
+        display: block;
+    }
+    .menu {
+        display: none;
+        animation: menu 1s cubic-bezier(0.77, 0, 0.175, 1);
+        width: 100VW;
+        height: 100vh;
+        position: fixed;
+        z-index: 1;
+        background-color: #1f1f1f;
+    }
+
 }
 </style>

@@ -30,20 +30,22 @@
                                                     <v-container>
                                                         <v-row>
                                                             <v-col>
-                                                                <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="createdItem.expirationDate" transition="scale-transition" offset-y min-width="auto">
+                                                                <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="expirationDateShow" transition="scale-transition" offset-y min-width="auto">
                                                                     <template v-slot:activator="{ on, attrs }">
-                                                                        <v-text-field hint="Selecione uma data" persistent-hint :rules="dateRules" v-model="createdItem.expirationDate" label="Data de expiração" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                                                        <v-text-field hint="Selecione uma data" persistent-hint :rules="dateRules" v-model="expirationDateShow" label="Data de expiração" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                                                                     </template>
-                                                                    <v-date-picker :allowed-dates="allowedDates" v-model="createdItem.expirationDate" no-title scrollable>
+                                                                    <v-date-picker :allowed-dates="allowedDates" v-model="expirationDateShow" no-title scrollable>
                                                                         <v-spacer></v-spacer>
                                                                         <v-btn text color="primary" @click="menu = false">
                                                                             Cancelar
                                                                         </v-btn>
-                                                                        <v-btn text color="primary" @click="$refs.menu.save(createdItem.expirationDate)">
+                                                                        <v-btn text color="primary" @click="$refs.menu.save(expirationDateShow)">
                                                                             OK
                                                                         </v-btn>
                                                                     </v-date-picker>
                                                                 </v-menu>
+                                                                {{ expirationDateShow }}
+                                                                {{ createdItem.expirationDate }}
                                                             </v-col>
                                                         </v-row>
                                                         <v-row>
@@ -79,7 +81,7 @@
                                                     <v-container>
                                                         <v-row>
                                                             <v-col>
-                                                                <v-menu ref="menuEdit" v-model="menuEdit" :close-on-content-click="false" :return-value.sync="editedItem.expirationDate" transition="scale-transition" offset-y min-width="auto">
+                                                                <v-menu ref="menuEdit" v-model="menuEdit" :close-on-content-click="false" :return-value.sync="expirationDateShow" transition="scale-transition" offset-y min-width="auto">
                                                                     <template v-slot:activator="{ on, attrs }">
                                                                         <v-text-field hint="Selecione uma data" persistent-hint :rules="dateRules" v-model="editedItem.expirationDate" label="Data de expiração" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                                                                     </template>
@@ -125,7 +127,7 @@
                             </template>
                             <template v-slot:no-data>
                                 <v-btn color="primary">
-                                    Reset
+                                    Resetar
                                 </v-btn>
                             </template>
                         </v-data-table>
@@ -141,6 +143,12 @@
 <style>
 .main-viewer {
     margin-left: 250px;
+}
+
+@media (max-width: 750px) {
+    .main-viewer {
+        margin-left: 0;
+    }
 }
 </style>
 
@@ -163,6 +171,7 @@ export default {
             usersName: [],
             books: [],
             users: [],
+            expirationDateShow: "",
             search: '',
             menu: '',
             menuEdit: '',
@@ -177,11 +186,11 @@ export default {
                     value: 'id',
                 },
                 {
-                    text: 'Data de entrada',
+                    text: 'Data de Entrada',
                     value: 'entryDate'
                 },
                 {
-                    text: 'Data de expiração',
+                    text: 'Data de Previsão',
                     value: 'expirationDate'
                 },
                 {
@@ -221,7 +230,7 @@ export default {
                 id: 0,
                 book: "",
                 user: "",
-                expirationDate: "" 
+                expirationDate: ""
             },
             editedItem: {
                 id: 0,
@@ -229,7 +238,7 @@ export default {
             },
             defaultItem: {
                 id: 0,
-                expirationDate: "" 
+                expirationDate: ""
             }
 
         }
@@ -249,7 +258,7 @@ export default {
 
     computed: {
         computedDateFormatted() {
-            return this.formatDate(this.editedItem.expirationDate)
+            return this.formatDate(this.expirationDateShow)
         },
     },
 
@@ -267,9 +276,17 @@ export default {
 
             Rentals.listAll(this.token.jwtToken).then(response => {
                 response.data.content.map(rentalContent => {
-                    if(rentalContent["returnDate"] != null) {
+                    if (rentalContent["returnDate"] != null) {
                         rentalContent["returnDate"] = rentalContent["returnDate"].split("-").reverse().join("/")
                     }
+                    if (rentalContent["status"] == "RETURNED_BEFORE") {
+                        rentalContent["status"] = "Retornado com antecedência"
+                    }else if(rentalContent["status"] == "RETURNED_AFTER") {
+                        rentalContent["status"] = "Retornado com atraso"
+                    }else {
+                        rentalContent["status"] = "Em espera..."
+                    }
+                    rentalContent["expirationDate"] = rentalContent["expirationDate"].split("-").reverse().join("/")
                     rentalContent["entryDate"] = rentalContent["entryDate"].split("-").reverse().join("/")
                     rentalContent["book"] = rentalContent["book"]["name"]
                     rentalContent["user"] = rentalContent["user"]["name"]
@@ -423,6 +440,7 @@ export default {
         },
 
         post() {
+            this.createdItem.expirationDate = this.expirationDateShow 
             if (this.valid) {
                 Rentals.save(this.buildJson(this.createdItem), this.token.jwtToken).then(res => {
                     this.listData()
@@ -438,6 +456,7 @@ export default {
 
         put() {
             if (this.valid) {
+                
                 Rentals.expiration(this.editedItem.id, this.editedItem, this.token.jwtToken).then(response => {
                     this.listData()
                     this.responseMessageAPI(response.status, response.data.message)
@@ -489,6 +508,7 @@ export default {
         },
 
         buildJson(itemToCreate) {
+            
             return {
                 id: itemToCreate.id,
                 expirationDate: itemToCreate.expirationDate,

@@ -1,6 +1,6 @@
 <template>
 <v-app id="inspire" class="main-viewer">
-    <v-main class="main-content">
+    <v-main>
         <h1 class="page-name">Dashboard</h1>
         <div class="info-group">
             <div class="card-info-group">
@@ -14,32 +14,32 @@
                 <div class="card-info">
                     <IosHome class="ion-icon" />
                     <div>
-                        <h2>Editoras</h2>
+                        <h2 class="card-title">Editoras</h2>
                         <span> {{ publisherQuantity }} </span>
                     </div>
                 </div>
                 <div class="card-info">
                     <IosPricetag class="ion-icon" />
                     <div>
-                        <h2>Aluguéis</h2>
+                        <h2 class="card-title">Aluguéis</h2>
                         <span> {{ rentalQuantity }} </span>
                     </div>
                 </div>
                 <div class="card-info">
                     <IosPerson class="ion-icon" />
                     <div>
-                        <h2>Usuários</h2>
+                        <h2 class="card-title">Usuários</h2>
                         <span> {{ userQuantity }} </span>
                     </div>
                 </div>
             </div>
             <div class="chart-group">
-                <div class="chart">
-                    <h2>Livros mais vistos</h2>
+                <div class="chart-long-reduce">
+                    <h2 class="card-title">Livros mais vistos</h2>
                     <Bar v-if="this.visibleData" :chart-data="chartData" />
                 </div>
                 <div class="chart-reduce">
-                    <h2>Editoras com mais aluguéis</h2>
+                    <h2 class="card-title">Editoras com mais aluguéis</h2>
                     <Doughnut v-if="this.visibleDataDoghnut" :chart-data="doughnutData" />
                 </div>
             </div>
@@ -49,52 +49,44 @@
 </template>
 
 <style>
+
 .page-name {
     display: block;
+    color: #fff;
     position: absolute;
     top: 1rem;
+    left: 1rem;
     font-size: 2rem;
     border-bottom: .4rem solid rgb(231, 85, 109);
 }
 
-.main-content {
-    position: relative;
+.card-info-group {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem 0;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    color: #fff;
-    padding: 1rem;
-}
-
-.card-info-group {
-    display: flex;
-    margin:  2.5rem 0 2rem;
+    flex-wrap: wrap;
+    margin: 2.5rem 0 2rem;
     gap: 1rem;
 }
 
 .info-group {
     display: flex;
+    padding: 3rem 5% 5%;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
 }
 
 .card-info {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.card-info {
+    text-align: center;
     position: relative;
     bottom: 0;
     width: 200px;
     height: 100px;
+    color: #fff;
     gap: .7rem;
     padding: .5rem 1rem;
     border: .2rem solid #fff;
@@ -107,6 +99,10 @@
     cursor: pointer;
     color: rgb(231, 85, 109);
     border-color: rgb(231, 85, 109);
+}
+
+.card-title {
+    color: #fff;
 }
 
 .card-info:hover .ion-icon {
@@ -140,11 +136,19 @@
 }
 
 .chart-reduce {
-    width: 250px;
+    max-width: 250px;
+    text-align: center;
+}
+
+.chart-long-reduce {
+    text-align: center;
+    max-width: 350px;
 }
 
 .chart-group {
     display: flex;
+    flex-wrap: wrap;
+    gap: 20px 0;
     justify-content: space-around;
     align-items: center;
     width: 100%;
@@ -154,7 +158,36 @@
 }
 
 .main-viewer {
+    color: #fff;
     margin-left: 250px;
+}
+
+@media (max-width: 750px) {
+    .main-viewer {
+        margin-top: 50px;
+        margin-left: 0;
+    }
+
+    .card-info {
+        width: 120px;
+        height: 100px;
+        flex-direction: column;
+    }
+
+    .card-info .ion-icon {
+        fill: #fff;
+        font-size: 1.5rem;
+        margin-right: 10px;
+    }
+
+    .card-info h2 {
+        font-size: .8rem;
+    }
+
+    .card-info span {
+        font-size: 1rem;
+    }
+
 }
 </style>
 
@@ -261,7 +294,7 @@ export default {
                 this.publisherQuantity = response.data.content.length
             })
             Users.listAll(this.token.jwtToken).then(response => {
-                this.userQuantity = response.data.content.length -1
+                this.userQuantity = response.data.content.length - 1
             })
         },
 
