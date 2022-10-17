@@ -1,5 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import dashboard from '../views/dashboard.vue'
+import books from '../views/books.vue'
+import publishers from '../views/publishers.vue'
+import rentals from '../views/rentals.vue'
+import users from '../views/users.vue'
+import login from '../views/login.vue'
+import forget from '../views/forget.vue'
 
 Vue.use(VueRouter)
 
@@ -7,37 +14,37 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('../views/dashboard.vue')
+    component: dashboard
   },
   {
     path: '/books',
     name: 'books',
-    component: () => import(/* webpackChunkName: "about" */ '../views/books.vue')
+    component: books
   },
   {
     path: '/publishers',
     name: 'publishers',
-    component: () => import(/* webpackChunkName: "about" */ '../views/publishers.vue')
+    component: publishers
   },
   {
     path: '/rentals',
     name: 'rentals',
-    component: () => import(/* webpackChunkName: "about" */ '../views/rentals.vue')
+    component: rentals
   },
   {
     path: '/users',
     name: 'users',
-    component: () => import(/* webpackChunkName: "about" */ '../views/users.vue')
+    component: users
   },
   {
     path: '/',
     name: 'login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
+    component: login
   },
   {
     path: '/forget',
     name: 'forget',
-    component: () => import(/* webpackChunkName: "about" */ '../views/forget.vue')
+    component: forget
   }
 ]
 
