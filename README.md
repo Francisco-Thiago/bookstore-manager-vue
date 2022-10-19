@@ -15,13 +15,6 @@ Você pode ver o projeto acessando as URLs, entretanto vale dizer que há um lim
 ### 🔧 Acessar projeto.
 - <a href="https://bookstore-manager-vue.vercel.app/" target="_blank">Bookstore Manager Vue - site</a>
 
-<<<<<<< HEAD
-=======
-## 📦 Desenvolvimento
-
-O projeto está em sua versão 1.0.0 em estado estável.
-
->>>>>>> f4c797a7ac8694d6a0e0e2a0edb0334433e622d7
 ## 🛠️ Construído com
 
 * [Vue 2](https://v2.vuejs.org/) - Principal tecnologia.
