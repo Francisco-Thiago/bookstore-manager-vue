@@ -51,8 +51,4 @@ O projeto está na versão 1.0.0 (estável).
 * Obrigado por ler até aqui, compartilhe se gostou 😎
 
 ---
-<<<<<<< HEAD
 ⌨️ com ❤️ por [Francisco Thiago](https://github.com/Francisco-Thiago/) 😊
-=======
-⌨️ com ❤️ por [Francisco Thiago](https://github.com/Francisco-Thiago/) 😊
->>>>>>> f4c797a7ac8694d6a0e0e2a0edb0334433e622d7
