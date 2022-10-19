@@ -17,8 +17,8 @@
         </v-container>
     </header>
     <v-app-bar v-if="barStatus" class="app-menu" absolute color="pink" elevate-on-scroll>
-        <v-app-bar-nav-icon @click="openMenu"></v-app-bar-nav-icon>
-        <v-toolbar-title>Bookstore Manager</v-toolbar-title>
+        <v-app-bar-nav-icon style="color: white" @click="openMenu"></v-app-bar-nav-icon>
+        <v-toolbar-title style="color: white">Bookstore Manager</v-toolbar-title>
     </v-app-bar>
     <router-view />
 </v-app>

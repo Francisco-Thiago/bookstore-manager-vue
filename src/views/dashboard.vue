@@ -14,21 +14,21 @@
                 <div class="card-info">
                     <IosHome class="ion-icon" />
                     <div>
-                        <h2 class="card-title">Editoras</h2>
+                        <h2>Editoras</h2>
                         <span> {{ publisherQuantity }} </span>
                     </div>
                 </div>
                 <div class="card-info">
                     <IosPricetag class="ion-icon" />
                     <div>
-                        <h2 class="card-title">Aluguéis</h2>
+                        <h2>Aluguéis</h2>
                         <span> {{ rentalQuantity }} </span>
                     </div>
                 </div>
                 <div class="card-info">
                     <IosPerson class="ion-icon" />
                     <div>
-                        <h2 class="card-title">Usuários</h2>
+                        <h2>Usuários</h2>
                         <span> {{ userQuantity }} </span>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
     top: 1rem;
     left: 1rem;
     font-size: 2rem;
-    border-bottom: .4rem solid rgb(231, 85, 109);
+    border-bottom: .4rem solid #e7556d;
 }
 
 .card-info-group {
@@ -97,22 +97,22 @@
 .card-info:hover {
     bottom: 10px;
     cursor: pointer;
-    color: rgb(231, 85, 109);
-    border-color: rgb(231, 85, 109);
+    color: #e7556d;
+    border-color: #e7556d;
 }
 
 .card-title {
     color: #fff;
 }
 
-.card-info:hover .ion-icon {
-    fill: rgb(231, 85, 109);
-}
-
 .card-info .ion-icon {
-    fill: #fff;
+    fill: #ffffff;
     font-size: 2rem;
     margin-right: 10px;
+}
+
+.card-info:hover .ion-icon {
+    fill: #e7556d;
 }
 
 .card-info h1 {
@@ -251,7 +251,7 @@ export default {
                 labels: [],
                 datasets: [{
                     label: 'Dados',
-                    backgroundColor: ['#CA054D', '#3B1C32', '#A4D4B4', '#FFCF9C', '#B96D40'],
+                    backgroundColor: ['#CA054D', '#00FFFb', '#A4D4B4', '#FFCF9C', '#B96D40'],
                     data: []
                 }]
             },
