@@ -1,7 +1,7 @@
 ![image](https://user-images.githubusercontent.com/75057408/195668810-f4cdbe00-c9fa-4f96-9e93-f4f71e8d23f2.png)
 
 # Atenção
-Devido as alterações do Heroku este projetoe está atualmente inativo. Não há previsão de refatoração.
+Devido as alterações do Heroku este projeto está atualmente inativo. Não há previsão de refatoração.
 
 # bookstore-manager-vue
 
